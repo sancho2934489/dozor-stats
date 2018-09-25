@@ -68,6 +68,15 @@
         secondsPole = secondsPole - (minutePole * 60);
         minuteVirt = Math.floor(secondsVirt/60);
         secondsVirt = secondsVirt - (minuteVirt * 60);
+
+        hourPole = hourPole.toString().length === 1 ? '0' + hourPole : hourPole;
+        minutePole = minutePole.toString().length === 1 ? '0' + minutePole : minutePole;
+        secondsPole = secondsPole.toString().length === 1 ? '0' + secondsPole : secondsPole;
+
+        hourVirt = hourVirt.toString().length === 1 ? '0' + hourVirt : hourVirt;
+        minuteVirt = minuteVirt.toString().length === 1 ? '0' + minuteVirt : minuteVirt;
+        secondsVirt = secondsVirt.toString().length === 1 ? '0' + secondsVirt : secondsVirt;
+
         $(commands[i]).append('<td>' + hourPole + ':' + minutePole + ':' + secondsPole + '</td>');
         $(commands[i]).append('<td>' + hourVirt + ':' + minuteVirt + ':' + secondsVirt + '</td>');
     }
