@@ -4,7 +4,7 @@
 // @version      0.1
 // @description  try to take over the world!
 // @author       sancho
-// @downloadURL  https://raw.githubusercontent.com/sancho2934489/dozor-stats/master/stats.js
+// @downloadURL  https://raw.githubusercontent.com/sancho2934489/dozor-stats/master/dozor.stats.user.js
 // @match        http://classic.dzzzr.ru/e-burg/?section=arc&gmid=*&what=stat
 // @require 	 https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js
 // @grant        none
