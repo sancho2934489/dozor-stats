@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         Dozor stats
 // @namespace    http://tampermonkey.net/
-// @version      0.2
+// @version      0.3
 // @description  try to take over the world!
 // @author       sancho
 // @downloadURL  https://raw.githubusercontent.com/sancho2934489/dozor-stats/master/dozor.stats.user.js
-// @match        http://classic.dzzzr.ru/e-burg/?section=arc&gmid=*&what=stat
+// @match        http://*.dzzzr.ru/*/?section=arc&gmid=*&what=stat
 // @require 	 https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js
 // @grant        none
 // ==/UserScript==
