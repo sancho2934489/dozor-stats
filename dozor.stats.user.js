@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Dozor stats
 // @namespace    http://tampermonkey.net/
-// @version      0.3
+// @version      0.4
 // @description  try to take over the world!
 // @author       sancho
 // @downloadURL  https://raw.githubusercontent.com/sancho2934489/dozor-stats/master/dozor.stats.user.js
@@ -37,6 +37,8 @@
 
     $('#suxx').find('#shapka').append('<th>Время по полю</th>');
     $('#suxx').find('#shapka').append('<th>Время по штабу(виртуалки)</th>');
+    $('#suxx').find('#shapka').append('<th>Отставание от лидера по полю</th>');
+    $('#suxx').find('#shapka').append('<th>Отставание от лидера по штабу</th>');
 
     var commands = $('#suxx').find('tr:not(#shapka)');
     var times, arText, secondsVirt, secondsPole, hourVirt, hourPole, minutePole, minuteVirt;
@@ -83,6 +85,8 @@
 
         $(commands[i]).append('<td id="command_pole_' + i + '">' + hourPole + ':' + minutePole + ':' + secondsPole + '</td>');
         $(commands[i]).append('<td id="command_virt_' + i + '">' + hourVirt + ':' + minuteVirt + ':' + secondsVirt + '</td>');
+        $(commands[i]).append('<td id="command_diff_pole_' + i + '">00:00:00</td>');
+        $(commands[i]).append('<td id="command_diff_virt_' + i + '">00:00:00</td>');
     }
     // Your code here...
 
@@ -103,6 +107,8 @@
             virt.push($(item).data('id'));
         }
 
+        var liderPole = 0, liderVirt = 0, diffPoleHour, diffPoleMinute, diffPoleSeconds, diffVirtHour, diffVirtMinute, diffVirtSeconds, diffPoleSign, diffVirtSign;
+
     for (i = 0; i < commands.length; i++) {
         times = $(commands[i]).find('td span span');
         secondsVirt = 0;
@@ -111,6 +117,14 @@
         hourVirt = 0;
         minutePole = 0;
         minuteVirt = 0;
+        diffPoleHour = 0;
+        diffPoleMinute = 0;
+        diffPoleSeconds = 0;
+        diffVirtHour = 0;
+        diffVirtMinute = 0;
+        diffVirtSeconds = 0;
+        diffPoleSign = '';
+        diffVirtSign = '';
         for (var j = 0; j < times.length; j++) {
             arText = [];
             if (virt.indexOf(j + 1) != -1) {
@@ -125,26 +139,61 @@
                     secondsPole += +arText[0]*3600 + +arText[1]*60 + +arText[2];
             }
         }
+
+        if (i == 0) {
+            liderPole = secondsPole;
+            liderVirt = secondsVirt;
+        }
+
+        diffPoleSeconds = secondsPole - liderPole;
+        diffVirtSeconds = secondsVirt - liderVirt;
+
+        if (diffPoleSeconds < 0) {
+            diffPoleSign = '-';
+            diffPoleSeconds = diffPoleSeconds * -1;
+        }
+
+        if (diffVirtSeconds < 0) {
+            diffVirtSign = '-';
+            diffVirtSeconds = diffVirtSeconds * -1;
+        }
+
         hourPole = Math.floor(secondsPole/3600);
         secondsPole = secondsPole - (hourPole * 3600);
+        diffPoleHour = Math.floor(diffPoleSeconds/3600);
+        diffPoleSeconds = diffPoleSeconds - (diffPoleHour * 3600);
         hourVirt = Math.floor(secondsVirt/3600);
         secondsVirt = secondsVirt - (hourVirt * 3600);
+        diffVirtHour = Math.floor(diffVirtSeconds/3600);
+        diffVirtSeconds = diffVirtSeconds - (diffVirtHour * 3600);
 
         minutePole = Math.floor(secondsPole/60);
         secondsPole = secondsPole - (minutePole * 60);
+        diffPoleMinute = Math.floor(diffPoleSeconds/60);
+        diffPoleSeconds = diffPoleSeconds - (diffPoleMinute * 60);
         minuteVirt = Math.floor(secondsVirt/60);
         secondsVirt = secondsVirt - (minuteVirt * 60);
+        diffVirtMinute = Math.floor(diffVirtSeconds/60);
+        diffVirtSeconds = diffVirtSeconds - (diffVirtMinute * 60);
 
         hourPole = hourPole.toString().length === 1 ? '0' + hourPole : hourPole;
         minutePole = minutePole.toString().length === 1 ? '0' + minutePole : minutePole;
         secondsPole = secondsPole.toString().length === 1 ? '0' + secondsPole : secondsPole;
+        diffPoleHour = diffPoleHour.toString().length === 1 ? '0' + diffPoleHour : diffPoleHour;
+        diffPoleMinute = diffPoleMinute.toString().length === 1 ? '0' + diffPoleMinute : diffPoleMinute;
+        diffPoleSeconds = diffPoleSeconds.toString().length === 1 ? '0' + diffPoleSeconds : diffPoleSeconds;
 
         hourVirt = hourVirt.toString().length === 1 ? '0' + hourVirt : hourVirt;
         minuteVirt = minuteVirt.toString().length === 1 ? '0' + minuteVirt : minuteVirt;
         secondsVirt = secondsVirt.toString().length === 1 ? '0' + secondsVirt : secondsVirt;
+        diffVirtHour = diffVirtHour.toString().length === 1 ? '0' + diffVirtHour : diffVirtHour;
+        diffVirtMinute = diffVirtMinute.toString().length === 1 ? '0' + diffVirtMinute : diffVirtMinute;
+        diffVirtSeconds = diffVirtSeconds.toString().length === 1 ? '0' + diffVirtSeconds : diffVirtSeconds;
 
         $('#command_pole_' + i).html(hourPole + ':' + minutePole + ':' + secondsPole);
         $('#command_virt_' + i).html(hourVirt + ':' + minuteVirt + ':' + secondsVirt);
+        $('#command_diff_pole_' + i).html(diffPoleSign + diffPoleHour + ':' + diffPoleMinute + ':' + diffPoleSeconds);
+        $('#command_diff_virt_' + i).html(diffVirtSign + diffVirtHour + ':' + diffVirtMinute + ':' + diffVirtSeconds);
     }
     });
 })();
